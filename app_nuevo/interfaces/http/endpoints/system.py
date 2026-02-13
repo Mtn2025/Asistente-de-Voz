@@ -3,9 +3,9 @@ System Endpoints.
 """
 import logging
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
-from app_nuevo.interfaces.http.dependencies import get_container, DIContainer
+from app_nuevo.interfaces.http.dependencies import get_container, DIContainer, verify_api_key
 
 router = APIRouter(prefix="/system", tags=["System"])
 logger = logging.getLogger(__name__)
