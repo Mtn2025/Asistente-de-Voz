@@ -6,6 +6,7 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException
 
 from app_nuevo.interfaces.http.dependencies import get_container, DIContainer, verify_api_key
+from app_nuevo.domain.ports.config_repository_port import ConfigRepositoryPort
 
 router = APIRouter(prefix="/system", tags=["System"])
 logger = logging.getLogger(__name__)
