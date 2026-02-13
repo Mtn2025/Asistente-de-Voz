@@ -40,3 +40,6 @@ class ComponentRegistry:
 
     def get_registration(self, interface: Type) -> dict | None:
         return self._registry.get(interface)
+
+# Global Registry Instance
+registry = ComponentRegistry()
