@@ -64,5 +64,37 @@ class SQLAlchemyTranscriptRepository(TranscriptRepositoryPort):
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                logger.error(f"Transcript worker error: {e}")
-                await asyncio.sleep(1) # Backoff
+                logger.error(f"❌ [Transcript Repo] Save failed: {e}")
+                # The original code had await asyncio.sleep(1) here.
+                # The instruction implies raising the exception, which would stop the worker.
+                # If the intention was to re-raise and then sleep, it's syntactically incorrect.
+                # Assuming the 'raise' is intended to propagate the error and stop the worker.
+                raise 
+    
+    async def get_transcripts_by_call_id(self, call_id: int) -> list:
+        """Get all transcripts for a specific call."""
+        try:
+            async with self.session_factory() as session:
+                from sqlalchemy import select
+                result = await session.execute(
+                    select(Transcript)
+                    .where(Transcript.call_id == call_id)
+                    .order_by(Transcript.timestamp.asc())
+                )
+                transcripts = result.scalars().all()
+                
+                # Convert to simple dicts
+                return [
+                    {
+                        "id": t.id,
+                        "call_id": t.call_id,
+                        "role": t.role,
+                        "content": t.content,
+                        "timestamp": t.timestamp.isoformat() if t.timestamp else None
+                    }
+                    for t in transcripts
+                ]
+                
+        except Exception as e:
+            logger.error(f"❌ [Transcript Repo] Get failed: {e}")
+            return []

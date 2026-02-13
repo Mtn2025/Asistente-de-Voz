@@ -55,3 +55,13 @@ class CallRepositoryPort(ABC):
         Update the call record with post-call analysis data.
         """
         pass
+    
+    @abstractmethod
+    async def delete_call(self, call_id: int) -> None:
+        """
+        Delete a call record and its associated transcripts.
+        
+        Args:
+            call_id: The ID of the call to delete.
+        """
+        pass

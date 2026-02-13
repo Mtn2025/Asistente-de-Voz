@@ -69,9 +69,10 @@ async def get_config(
 ):
     """Get configuration for a profile."""
     repo = container.resolve(ConfigRepositoryPort)
-    config = await repo.get_agent_config(1) # Default agent
-    
-    if not config:
+    try:
+        config = await repo.get_config(profile=profile)
+    except Exception as e:
+        logger.error(f"Config get error: {e}")
         raise HTTPException(status_code=404, detail="Config not found")
         
     try:
@@ -87,24 +88,14 @@ async def get_config(
 async def _update_config_generic(container: DIContainer, profile: str, data: dict):
     """Generic update helper."""
     repo = container.resolve(ConfigRepositoryPort)
-    config = await repo.get_agent_config(1)
-    if not config:
-        raise HTTPException(404, "Config not found")
-        
-    # In Hexagonal, we usually have a UseCase 'UpdateConfig'
-    # For migration, we update the entity and save via repo
-    # Assuming Repo has update method or we map properties
     
-    # Map input data (which is already aliased by Pydantic) to DB fields?
-    # Wait, Pydantic 'model_dump' gives us snake_case if we used the schema.
-    
-    # Update attributes
-    for key, value in data.items():
-        if hasattr(config, key):
-             setattr(config, key, value)
-             
-    await repo.update_agent_config(config)
-    return True
+    # Update config using Port interface
+    try:
+        await repo.update_config(profile=profile, **data)
+        return True
+    except Exception as e:
+        logger.error(f"Config update error: {e}")
+        raise HTTPException(500, f"Update failed: {e}")
 
 
 @router.patch("/browser")
@@ -147,17 +138,16 @@ async def patch_config_generic(
     """Generic Patch (JSON)."""
     body = await request.json()
     repo = container.resolve(ConfigRepositoryPort)
-    config = await repo.get_agent_config(1)
-    if not config:
-        raise HTTPException(404, "Config not found")
-        
-    # Naive update
-    for k, v in body.items():
-        if hasattr(config, k):
-            setattr(config, k, v)
-            
-    await repo.update_agent_config(config)
-    return {"status": "ok", "updated": list(body.keys())}
+    
+    # Determine profile from body or default
+    profile = body.pop("profile", "default")
+    
+    try:
+        await repo.update_config(profile=profile, **body)
+        return {"status": "ok", "updated": list(body.keys())}
+    except Exception as e:
+        logger.error(f"Config patch error: {e}")
+        raise HTTPException(500, f"Update failed: {e}")
 
 
 # --- Dynamic Options ---

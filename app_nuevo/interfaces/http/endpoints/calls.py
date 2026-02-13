@@ -113,10 +113,11 @@ async def test_call_telnyx(
 
         # Resolve Config via Repository (Clean Arch)
         from app_nuevo.domain.ports.config_repository_port import ConfigRepositoryPort
+        # Get config for extraction template
         config_repo = container.resolve(ConfigRepositoryPort)
-        # Assuming agent_id 1 for test
-        config = await config_repo.get_agent_config(1)
+        config = await config_repo.get_config(profile="default")
         
+        # Perform extractionfig:
         if not config:
              raise HTTPException(status_code=404, detail="Config not found")
 

@@ -23,10 +23,13 @@ async def get_call_detail(
     call_repo = container.resolve(CallRepositoryPort)
     trans_repo = container.resolve(TranscriptRepositoryPort)
     
-    call = await call_repo.get_call_by_id(call_id)
+    # Get call details
+    call = await call_repo.get_call(call_id)
+    
     if not call:
-        raise HTTPException(404, "Call not found")
-        
+        raise HTTPException(status_code=404, detail="Call not found")
+    
+    # Get transcripts
     transcripts = await trans_repo.get_transcripts_by_call_id(call_id)
     
     return {

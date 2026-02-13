@@ -105,3 +105,27 @@ class SQLAlchemyCallRepository(CallRepositoryPort):
                 logger.info(f"Updated extraction for call {call_id}: {extracted_data}")
         except Exception as e:
             logger.error(f"Failed to update extraction for call {call_id}: {e}")
+    
+    async def delete_call(self, call_id: int) -> None:
+        """Delete a call record and its associated transcripts."""
+        try:
+            async with self.session_factory() as session:
+                from sqlalchemy import delete
+                from app_nuevo.infrastructure.database.models import Call, Transcript
+                
+                # Delete transcripts first (FK constraint)
+                await session.execute(
+                    delete(Transcript).where(Transcript.call_id == call_id)
+                )
+                
+                # Delete call
+                await session.execute(
+                    delete(Call).where(Call.id == call_id)
+                )
+                
+                await session.commit()
+                logger.info(f"Deleted call {call_id} and associated transcripts")
+                
+        except Exception as e:
+            logger.error(f"Failed to delete call {call_id}: {e}")
+            raise

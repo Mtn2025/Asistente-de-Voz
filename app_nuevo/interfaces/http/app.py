@@ -35,9 +35,15 @@ async def lifespan(app: FastAPI):
     
     # Initialize Database
     from app_nuevo.infrastructure.database.session import init_db
+    from app_nuevo.infrastructure.database.seed import seed_default_config
     logger.info("🔧 Initializing database...")
     await init_db()
     logger.info("✅ Database initialized")
+    
+    # Seed default data
+    logger.info("🌱 Seeding default data...")
+    await seed_default_config()
+    logger.info("✅ Seeding complete")
     
     yield
     

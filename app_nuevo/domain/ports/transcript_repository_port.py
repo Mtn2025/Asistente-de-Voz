@@ -19,3 +19,16 @@ class TranscriptRepositoryPort(ABC):
             content: The text content.
         """
         pass
+    
+    @abstractmethod
+    async def get_transcripts_by_call_id(self, call_id: int) -> list:
+        """
+        Get all transcripts for a specific call.
+        
+        Args:
+            call_id: The ID of the call.
+            
+        Returns:
+            List of transcript records for the call.
+        """
+        pass
