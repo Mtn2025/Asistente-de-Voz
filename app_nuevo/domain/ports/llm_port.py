@@ -3,9 +3,10 @@ Port (Interface) for Large Language Models (LLM).
 """
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator
+from dataclasses import dataclass
 from typing import Any, List, Protocol
 
-from app_nuevo.domain.value_objects.llm_value_objects import LLMChunk, LLMFunctionCall
+from app_nuevo.domain.value_objects.llm_value_objects import LLMChunk, LLMFunctionCall, LLMMessage
 
 class LLMException(Exception):
     """Exception for LLM errors."""
@@ -20,7 +21,7 @@ class LLMRequest:
     """
     Standard request for LLM generation.
     """
-    messages: List[Any] # Should be List[LLMMessage] but keeping Any to avoid circular dep if msg is in VO
+    messages: List[LLMMessage]
     model: str
     temperature: float = 0.7
     max_tokens: int = 150

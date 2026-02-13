@@ -3,14 +3,39 @@ Port (Interface) for Speech-to-Text (STT) providers.
 """
 from abc import ABC, abstractmethod
 from collections.abc import Callable
+from dataclasses import dataclass
 from typing import Any, Protocol
+
+class STTException(Exception):
+    """Base exception for STT errors."""
+    pass
+
+@dataclass
+class STTConfig:
+    """
+    Configuration for STT recognition.
+    """
+    language: str = "es-ES"
+    sample_rate: int = 16000
+    channels: int = 1
+    enable_denoising: bool = False
+
+@dataclass
+class STTEvent:
+    """
+    Event emitted by STT recognizer.
+    """
+    text: str
+    is_final: bool
+    confidence: float = 1.0
+    speech_detected: bool = True
 
 # We use Protocol for the Recognizer to avoid tight coupling if implementations vary wildly
 class STTRecognizer(Protocol):
     """
     Interface for a streaming STT recognizer instance.
     """
-    def subscribe(self, callback: Callable[[Any], None]) -> None: ...
+    def subscribe(self, callback: Callable[[STTEvent | Any], None]) -> None: ...
     async def start_continuous_recognition(self) -> None: ...
     async def stop_continuous_recognition(self) -> None: ...
     def write(self, audio_data: bytes) -> None: ...
@@ -24,7 +49,7 @@ class STTPort(ABC):
     @abstractmethod
     def create_recognizer(
         self,
-        config: Any, # Typed as Any here to decouple from specific config DTOs for now
+        config: STTConfig | Any,
         on_interruption_callback: Callable | None = None,
         event_loop: Any | None = None
     ) -> STTRecognizer:

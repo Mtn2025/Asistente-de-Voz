@@ -5,6 +5,23 @@ from abc import ABC, abstractmethod
 from typing import Any, List, Optional
 from dataclasses import dataclass
 
+class TTSException(Exception):
+    """Base exception for TTS errors."""
+    pass
+
+@dataclass
+class TTSRequest:
+    """
+    Standard request for TTS synthesis.
+    """
+    text: str
+    voice_id: str
+    language: str | None = None
+    style: str | None = None
+    speed: float = 1.0
+    pitch: str | None = None
+    format: str = "mp3"
+
 @dataclass
 class VoiceMetadata:
     """Metadata for an available voice."""
@@ -12,6 +29,7 @@ class VoiceMetadata:
     name: str
     gender: str
     locale: str
+    styles: List[str] | None = None
 
 class TTSPort(ABC):
     """
@@ -19,15 +37,15 @@ class TTSPort(ABC):
     """
 
     @abstractmethod
-    async def synthesize(self, request: Any) -> bytes:
+    async def synthesize(self, request: TTSRequest | Any) -> bytes:
         """
         Synthesize text to audio.
         
         Args:
-             request: TTS synthesis request parameters.
-             
+            request: TTS synthesis request parameters.
+            
         Returns:
-             Raw audio bytes.
+            Raw audio bytes.
         """
         pass
 

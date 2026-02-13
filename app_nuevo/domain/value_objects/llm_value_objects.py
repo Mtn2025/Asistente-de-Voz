@@ -80,3 +80,26 @@ class ToolDefinitionForLLM:
                 "parameters": self.parameters
             }
         }
+
+@dataclass
+class LLMMessage:
+    """
+    Message in LLM conversation.
+    """
+    role: str
+    content: str | None = None
+    name: str | None = None
+    function_call: LLMFunctionCall | None = None
+    tool_calls: list[Any] | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        result = {"role": self.role}
+        if self.content is not None:
+             result["content"] = self.content
+        if self.name:
+             result["name"] = self.name
+        if self.function_call:
+             result["function_call"] = self.function_call.to_dict()
+        if self.tool_calls:
+             result["tool_calls"] = self.tool_calls
+        return result
