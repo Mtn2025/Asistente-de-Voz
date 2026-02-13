@@ -21,21 +21,18 @@ from ....domain.ports import (
     ExtractionPort
 )
 
-# Services
-from ....application.services.voice_orchestrator import VoiceOrchestratorService
-from ....application.services.pipeline_service import PipelineService
-
 # Core Config
 from app_nuevo.infrastructure.config.settings import settings
 
 logger = logging.getLogger(__name__)
 
-def configure_container() -> DIContainer:
+def configure_infrastructure_container() -> DIContainer:
     """
-    Bootstraps the Dependency Injection Container.
+    Bootstraps Infrastructure Layer DI Container.
+    Registers only Ports and their Adapter implementations.
     
     Returns:
-        Configured DIContainer instance.
+        Configured DIContainer instance with Infrastructure components.
     """
     registry = ComponentRegistry()
     
@@ -93,21 +90,7 @@ def configure_container() -> DIContainer:
         is_singleton=True
     )
     
-    # --- Application Services (Transient) ---
-    
-    # 7. Voice Orchestrator
-    # Registered as a class. It has dependencies on Ports defined above.
-    # It requires 'transport' to be passed at resolve time (overrides).
-    registry.register(
-        VoiceOrchestratorService,
-        implementation=VoiceOrchestratorService,
-        is_singleton=False 
-    )
-    
-    # Note: PipelineService is created via PipelineFactory inside VoiceOrchestrator, 
-    # so we don't necessarily need to register it here, but we could if we wanted to abstract the factory.
-    
-    logger.info("✅ DI Container configured successfully")
+    logger.info("✅ Infrastructure DI Container configured successfully")
     return DIContainer(registry)
 
 
@@ -118,5 +101,5 @@ def get_container() -> DIContainer:
     """Get or create the global container instance."""
     global _container
     if not _container:
-        _container = configure_container()
+        _container = configure_infrastructure_container()
     return _container

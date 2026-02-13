@@ -6,13 +6,13 @@ from typing import Any
 
 from app_nuevo.domain.value_objects.frames import CancelFrame, EndTaskFrame, Frame, TextFrame
 from app_nuevo.application.common.frame_processor import FrameDirection, FrameProcessor
-from app_nuevo.domain.models.llm_models import LLMFunctionCall
-from app_nuevo.domain.models.tool_models import ToolRequest
+from app_nuevo.domain.value_objects.llm_value_objects import LLMFunctionCall
+from app_nuevo.domain.value_objects.tool_value_objects import ToolRequest, ToolResponse
 from app_nuevo.domain.ports import LLMMessage, LLMPort, LLMRequest
 from app_nuevo.domain.use_cases import ExecuteToolUseCase
 
 from app_nuevo.application.components.hold_audio import HoldAudioPlayer
-from app_nuevo.application.components.prompt_builder import PromptBuilder
+from app_nuevo.domain.services.prompt_builder import PromptBuilder
 
 logger = logging.getLogger(__name__)
 
@@ -244,7 +244,7 @@ class LLMProcessor(FrameProcessor):
         """
         if not self.execute_tool:
             logger.error(f"[LLM] trace={self.trace_id} No ExecuteToolUseCase configured")
-            from app_nuevo.domain.models.tool_models import ToolResponse
+
             return ToolResponse(
                 tool_name=function_call.name,
                 result=None,

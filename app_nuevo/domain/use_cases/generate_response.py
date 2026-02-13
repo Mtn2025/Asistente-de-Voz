@@ -8,9 +8,7 @@ from dataclasses import dataclass
 from typing import Any, List
 
 from app_nuevo.domain.ports.llm_port import LLMPort, LLMRequest, LLMMessage
-# Note: PromptBuilder might need to be migrated to a Domain Service or Port
-# For now, we assume it exists or we mock it.
-from app_nuevo.application.components.prompt_builder import PromptBuilder 
+from app_nuevo.domain.services.prompt_builder import PromptBuilder 
 
 logger = logging.getLogger(__name__)
 

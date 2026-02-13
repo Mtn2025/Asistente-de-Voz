@@ -8,8 +8,8 @@ import datetime
 import logging
 from typing import Any
 
-from app_nuevo.infrastructure.database.session import get_dbAsyncSessionLocal
-from app_nuevo.services.db_service import db_service
+from app_nuevo.infrastructure.database.session import AsyncSessionLocal
+from app_nuevo.infrastructure.database.db_service import db_service
 
 logger = logging.getLogger(__name__)
 

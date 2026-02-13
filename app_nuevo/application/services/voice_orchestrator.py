@@ -20,7 +20,8 @@ from app_nuevo.application.factories.pipeline_factory import PipelineFactory
 from app_nuevo.infrastructure.services.audio_manager import AudioManager
 from app_nuevo.domain.value_objects.frames import AudioFrame, TextFrame
 from app_nuevo.domain.value_objects.voice_config import VoiceConfig  # Assuming migrated or compatible
-from app_nuevo.domain.state import ConversationFSM, ConversationState
+# FIXME: ConversationFSM and ConversationState don't exist in domain layer
+# from app_nuevo.domain.state import ConversationFSM, ConversationState
 
 # Ports
 from app_nuevo.domain.ports import (
@@ -123,7 +124,9 @@ class VoiceOrchestratorService:
              logger.debug(f"🗣️ [Orchestrator] Injected TTS config: {audio_config}")
 
         # Finite State Machine
-        self.fsm = ConversationFSM()
+        # FIXME: FSM classes don't exist in domain - commented out until implemented
+        # self.fsm = ConversationFSM()
+        self.fsm = None
 
         # Control Channel
         self.control_channel = ControlChannel()
@@ -287,9 +290,9 @@ class VoiceOrchestratorService:
             await self.audio_manager.stop()
 
         # Update CRM status
-        if self.crm_manager:
+        if self.crm_service:
             phone = self.initial_context_data.get('from') or self.initial_context_data.get('From')
-            await self.crm_manager.update_status(phone, "Call Ended")
+            await self.crm_service.update_status(phone, "Call Ended")
 
         # Close DB record
         if self.call_db_id:
@@ -400,21 +403,23 @@ class VoiceOrchestratorService:
         Args:
             text: Optional partial transcription causing interruption
         """
-        # Only interrupt if bot is SPEAKING/PROCESSING (Use Case Logic)
-        if not await self.fsm.can_interrupt():
-            logger.debug(
-                f"🛑 Interruption ignored - state={self.fsm.state.value} "
-                f"(text: {text[:30] if text else 'VAD'})"
-            )
-            return
+        # FIXME: FSM check commented out - always allow interruption for now
+        # # Only interrupt if bot is SPEAKING/PROCESSING (Use Case Logic)
+        # if not await self.fsm.can_interrupt():
+        #     logger.debug(
+        #         f"🛑 Interruption ignored - state={self.fsm.state.value} "
+        #         f"(text: {text[:30] if text else 'VAD'})"
+        #     )
+        #     return
 
         logger.info(f"🛑 Interruption detected: {text[:50] if text else 'VAD'}")
 
-        # Transition: SPEAKING -> INTERRUPTED
-        await self.fsm.transition(
-            ConversationState.INTERRUPTED,
-            f"user_spoke: {text[:30]}" if text else "vad_detected"
-        )
+        # FIXME: FSM logic commented out until FSM classes are implemented
+        # # Transition: SPEAKING -> INTERRUPTED
+        # await self.fsm.transition(
+        #     ConversationState.INTERRUPTED,
+        #     f"user_spoke: {text[:30]}" if text else "vad_detected"
+        # )
 
         # Execute domain Use Case
         reason = f"user_spoke: {text[:30]}" if text else "vad_detected"
@@ -426,8 +431,9 @@ class VoiceOrchestratorService:
         if command.clear_pipeline:
             await self._clear_pipeline_output()
 
-        # Transition: INTERRUPTED -> LISTENING
-        await self.fsm.transition(ConversationState.LISTENING, "ready_for_input")
+        # FIXME: FSM transition commented out
+        # # Transition: INTERRUPTED -> LISTENING
+        # await self.fsm.transition(ConversationState.LISTENING, "ready_for_input")
 
         # Update last interaction time
         self.last_interaction_time = time.time()
@@ -459,17 +465,18 @@ class VoiceOrchestratorService:
             frame = await use_case.execute(text, voice_config)
 
             if isinstance(frame, AudioFrame):
-                # Check FSM permissions
-                if not await self.fsm.can_speak():
-                    logger.debug(
-                        f"Audio dropped - state={self.fsm.state.value} "
-                        f"(prevents audio ghosting)"
-                    )
-                    return
-
-                # Update State if needed
-                if self.fsm.state != ConversationState.SPEAKING:
-                    await self.fsm.transition(ConversationState.SPEAKING, "tts_output_started")
+                # FIXME: FSM check and transition commented out
+                # # Check FSM permissions
+                # if not await self.fsm.can_speak():
+                #     logger.debug(
+                #         f"Audio dropped - state={self.fsm.state.value} "
+                #         f"(prevents audio ghosting)"
+                #     )
+                #     return
+                #
+                # # Update State if needed
+                # if self.fsm.state != ConversationState.SPEAKING:
+                #     await self.fsm.transition(ConversationState.SPEAKING, "tts_output_started")
 
                 audio_data = frame.data
                 await self.send_audio_chunked(audio_data)
