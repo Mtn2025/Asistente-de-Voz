@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     # Dev Server Configuration
     uvicorn.run(
-        "app_nuevo.main:app",
+        "main:app",  # app is defined in this file (root main.py)
         host="0.0.0.0",
         port=port,
         reload=True,      # Hot reload for development
