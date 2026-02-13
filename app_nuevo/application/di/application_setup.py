@@ -17,7 +17,7 @@ def configure_application_container() -> DIContainer:
     """
     # Start with infrastructure container (ports/adapters)
     container = configure_infrastructure_container()
-    registry = container._registry
+    registry = container.registry  # Access public registry attribute
     
     # Register Application Services
     registry.register(
