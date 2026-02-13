@@ -6,7 +6,7 @@ Shared dependencies for HTTP endpoints (Authentication, DI, etc.).
 import logging
 from typing import Annotated, Optional
 
-from fastapi import Depends, HTTPException, Security, status
+from fastapi import Depends, HTTPException, Security, status, Request
 from fastapi.security import APIKeyHeader
 
 from app_nuevo.infrastructure.di.container import DIContainer
@@ -71,4 +71,4 @@ async def require_telnyx_signature(request: Request):
 
 # Type alias for Container
 ContainerDep = Annotated[DIContainer, Depends(get_container)]
-from fastapi import Request
+
