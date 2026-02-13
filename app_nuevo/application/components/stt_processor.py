@@ -9,7 +9,7 @@ from app_nuevo.application.common.frame_processor import FrameDirection, FramePr
 from app_nuevo.domain.ports.stt_port import STTConfig
 # from app_nuevo.services.base import STTEvent, STTProvider, STTResultReason # LEGACY/INCORRECT -> Using ValueObjects
 from app_nuevo.domain.value_objects.stt_value_objects import STTEvent, STTResultReason
-from app_nuevo.domain.ports.stt_port import STTProvider
+from app_nuevo.domain.ports.stt_port import STTPort
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ class STTProcessor(FrameProcessor):
     Consumes AudioFrames, writes to Azure PushStream.
     Listens to Azure Events, produces TextFrames.
     """
-    def __init__(self, provider: STTProvider, config: Any, loop: asyncio.AbstractEventLoop, control_channel=None):
+    def __init__(self, provider: STTPort, config: Any, loop: asyncio.AbstractEventLoop, control_channel=None):
         super().__init__(name="STTProcessor")
         self.provider = provider
         self.config = config
