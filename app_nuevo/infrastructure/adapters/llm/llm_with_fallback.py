@@ -4,7 +4,7 @@ Fallback Wrapper for LLM Port.
 import logging
 from collections.abc import AsyncIterator
 
-from app.domain.ports.llm_port import LLMException, LLMPort, LLMRequest, LLMChunk
+from app_nuevo.domain.ports.llm_port import LLMException, LLMPort, LLMRequest, LLMChunk
 
 logger = logging.getLogger(__name__)
 

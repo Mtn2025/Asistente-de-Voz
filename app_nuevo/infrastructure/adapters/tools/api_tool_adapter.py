@@ -11,8 +11,8 @@ import time
 import aiohttp
 
 # Imports updated to new domain structure
-from app.domain.ports.tool_port import ToolPort, ToolDefinition
-from app.domain.value_objects.tool_value_objects import ToolRequest, ToolResponse
+from app_nuevo.domain.ports.tool_port import ToolPort, ToolDefinition
+from app_nuevo.domain.value_objects.tool_value_objects import ToolRequest, ToolResponse
 
 logger = logging.getLogger(__name__)
 

@@ -6,7 +6,7 @@ import logging
 from dataclasses import dataclass
 from typing import Dict, Any
 
-from app.domain.ports.tool_port import ToolPort, ToolDefinition
+from app_nuevo.domain.ports.tool_port import ToolPort, ToolDefinition
 
 logger = logging.getLogger(__name__)
 

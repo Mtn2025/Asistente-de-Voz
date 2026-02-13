@@ -6,9 +6,9 @@ import logging
 from dataclasses import dataclass
 from typing import Any, List, Dict
 
-from app.domain.ports.call_repository_port import CallRepositoryPort
-from app.domain.ports.extraction_port import ExtractionPort
-from app.domain.ports.transcript_repository_port import TranscriptRepositoryPort
+from app_nuevo.domain.ports.call_repository_port import CallRepositoryPort
+from app_nuevo.domain.ports.extraction_port import ExtractionPort
+from app_nuevo.domain.ports.transcript_repository_port import TranscriptRepositoryPort
 
 logger = logging.getLogger(__name__)
 

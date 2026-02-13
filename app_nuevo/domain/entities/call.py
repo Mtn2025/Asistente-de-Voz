@@ -7,8 +7,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 
-from app.domain.value_objects.call_id import CallId
-from app.domain.value_objects.call_context import CallMetadata
+from app_nuevo.domain.value_objects.call_id import CallId
+from app_nuevo.domain.value_objects.call_context import CallMetadata
 
 class CallStatus(Enum):
     """Possible states of a call session."""

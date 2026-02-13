@@ -9,8 +9,8 @@ import logging
 from collections.abc import AsyncIterator
 from typing import List, Optional
 
-from app.domain.value_objects.tts_value_objects import TTSRequest, VoiceMetadata
-from app.domain.ports.tts_port import TTSException, TTSPort
+from app_nuevo.domain.value_objects.tts_value_objects import TTSRequest, VoiceMetadata
+from app_nuevo.domain.ports.tts_port import TTSException, TTSPort
 
 logger = logging.getLogger(__name__)
 

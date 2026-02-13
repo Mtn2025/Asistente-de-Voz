@@ -3,8 +3,8 @@ import contextlib
 import logging
 from collections.abc import Callable, Coroutine
 
-from app.domain.value_objects.frames import BackpressureFrame, Frame, SystemFrame
-from app.application.common.frame_processor import FrameDirection, FrameProcessor
+from app_nuevo.domain.value_objects.frames import BackpressureFrame, Frame, SystemFrame
+from app_nuevo.application.common.frame_processor import FrameDirection, FrameProcessor
 
 # Configure logging
 logger = logging.getLogger(__name__)

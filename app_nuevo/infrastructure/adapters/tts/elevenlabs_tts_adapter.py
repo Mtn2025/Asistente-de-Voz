@@ -7,8 +7,8 @@ import logging
 from collections.abc import AsyncGenerator
 
 from app_nuevo.infrastructure.config.settings import settings
-from app.domain.value_objects.tts_value_objects import TTSRequest
-from app.domain.ports.tts_port import TTSPort
+from app_nuevo.domain.value_objects.tts_value_objects import TTSRequest
+from app_nuevo.domain.ports.tts_port import TTSPort
 
 logger = logging.getLogger(__name__)
 

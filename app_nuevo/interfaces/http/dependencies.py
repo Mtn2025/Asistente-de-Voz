@@ -58,7 +58,7 @@ async def require_twilio_signature(request: Request):
     Validate Twilio Request Signature.
     (Stub for migration - Legacy used 'require_twilio_signature')
     """
-    # TODO: Migrate full signature validation from app.core.webhook_security
+    # TODO: Migrate full signature validation from app_nuevo.core.webhook_security
     # For now, pass to avoid breaking if not strictly enforced in dev
     return True
 

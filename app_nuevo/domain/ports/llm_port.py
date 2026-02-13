@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator
 from typing import Any, List, Protocol
 
-from app.domain.value_objects.llm_value_objects import LLMChunk, LLMFunctionCall
+from app_nuevo.domain.value_objects.llm_value_objects import LLMChunk, LLMFunctionCall
 
 class LLMException(Exception):
     """Exception for LLM errors."""

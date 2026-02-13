@@ -11,8 +11,8 @@ from collections.abc import Callable
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # Imports updated to new domain structure
-from app.domain.ports.tool_port import ToolPort
-from app.domain.value_objects.tool_value_objects import ToolDefinition, ToolRequest, ToolResponse
+from app_nuevo.domain.ports.tool_port import ToolPort
+from app_nuevo.domain.value_objects.tool_value_objects import ToolDefinition, ToolRequest, ToolResponse
 
 logger = logging.getLogger(__name__)
 

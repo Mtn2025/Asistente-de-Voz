@@ -4,7 +4,7 @@ Represents a persistent record of a conversation segment.
 """
 from dataclasses import dataclass, field
 from datetime import datetime
-from app.domain.value_objects.call_id import CallId
+from app_nuevo.domain.value_objects.call_id import CallId
 
 @dataclass(frozen=True)
 class Transcript:

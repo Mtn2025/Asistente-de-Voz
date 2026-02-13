@@ -9,7 +9,7 @@ import contextlib
 import logging
 
 # Updated Import for app-nuevo structure
-from app.infrastructure.services.audio_manager import AudioManager
+from app_nuevo.infrastructure.services.audio_manager import AudioManager
 
 logger = logging.getLogger(__name__)
 

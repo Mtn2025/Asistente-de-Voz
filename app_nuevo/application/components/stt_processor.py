@@ -7,7 +7,7 @@ from typing import Any
 from app_nuevo.domain.value_objects.frames import AudioFrame, CancelFrame, Frame, TextFrame
 from app_nuevo.application.common.frame_processor import FrameDirection, FrameProcessor
 from app_nuevo.domain.ports.stt_port import STTConfig
-# from app.services.base import STTEvent, STTProvider, STTResultReason # LEGACY/INCORRECT -> Using ValueObjects
+# from app_nuevo.services.base import STTEvent, STTProvider, STTResultReason # LEGACY/INCORRECT -> Using ValueObjects
 from app_nuevo.domain.value_objects.stt_value_objects import STTEvent, STTResultReason
 from app_nuevo.domain.ports.stt_port import STTProvider
 

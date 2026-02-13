@@ -5,8 +5,8 @@ Provides TTS synthesis via Google Cloud Text-to-Speech API.
 """
 import logging
 
-from app.domain.value_objects.tts_value_objects import TTSRequest, VoiceMetadata
-from app.domain.ports.tts_port import TTSPort
+from app_nuevo.domain.value_objects.tts_value_objects import TTSRequest, VoiceMetadata
+from app_nuevo.domain.ports.tts_port import TTSPort
 
 logger = logging.getLogger(__name__)
 

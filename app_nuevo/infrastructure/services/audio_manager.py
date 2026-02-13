@@ -9,7 +9,7 @@ import contextlib
 import logging
 from pathlib import Path
 
-from app.domain.ports import AudioTransport
+from app_nuevo.domain.ports import AudioTransport
 
 logger = logging.getLogger(__name__)
 

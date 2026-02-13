@@ -2,8 +2,8 @@ import logging
 import time
 from typing import Any
 
-from app.domain.value_objects.frames import AudioFrame, Frame, UserStoppedSpeakingFrame
-from app.application.common.frame_processor import FrameDirection, FrameProcessor
+from app_nuevo.domain.value_objects.frames import AudioFrame, Frame, UserStoppedSpeakingFrame
+from app_nuevo.application.common.frame_processor import FrameDirection, FrameProcessor
 
 logger = logging.getLogger(__name__)
 

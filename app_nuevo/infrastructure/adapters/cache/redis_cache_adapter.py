@@ -8,8 +8,8 @@ de serialización JSON y TTLs.
 import logging
 from typing import Any
 
-from app.domain.ports.cache_port import CachePort
-from app.services.cache import cache as redis_cache_service
+from app_nuevo.domain.ports.cache_port import CachePort
+from app_nuevo.services.cache import cache as redis_cache_service
 
 logger = logging.getLogger(__name__)
 

@@ -5,7 +5,7 @@ import logging
 from collections.abc import Callable
 from typing import Any
 
-from app.domain.ports.stt_port import STTPort, STTRecognizer, STTConfig, STTException
+from app_nuevo.domain.ports.stt_port import STTPort, STTRecognizer, STTConfig, STTException
 
 logger = logging.getLogger(__name__)
 

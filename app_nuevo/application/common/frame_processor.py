@@ -2,7 +2,7 @@ import logging
 from abc import ABC, abstractmethod
 from enum import IntEnum
 
-from app.domain.value_objects.frames import Frame
+from app_nuevo.domain.value_objects.frames import Frame
 
 # Configure logging
 logger = logging.getLogger(__name__)

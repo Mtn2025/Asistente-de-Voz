@@ -17,7 +17,7 @@ from app_nuevo.infrastructure.config.settings import settings
 from app_nuevo.infrastructure.observability.decorators import track_streaming_latency
 from app_nuevo.domain.value_objects.tts_value_objects import TTSRequest, VoiceMetadata
 from app_nuevo.domain.ports.tts_port import TTSException, TTSPort
-# from app.observability import get_metrics_collector # TODO: Migrate Observability
+# from app_nuevo.observability import get_metrics_collector # TODO: Migrate Observability
 from app_nuevo.infrastructure.adapters.tts.azure_voice_styles import get_voice_styles_spanish, translate_style_list
 
 logger = logging.getLogger(__name__)

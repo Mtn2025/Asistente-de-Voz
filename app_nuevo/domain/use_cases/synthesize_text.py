@@ -6,9 +6,9 @@ import logging
 from dataclasses import dataclass
 from typing import Any
 
-from app.domain.ports.tts_port import TTSPort, TTSRequest
+from app_nuevo.domain.ports.tts_port import TTSPort, TTSRequest
 # Assuming VoiceConfig is available (Value Object)
-from app.domain.value_objects.voice_config import VoiceConfig 
+from app_nuevo.domain.value_objects.voice_config import VoiceConfig 
 
 logger = logging.getLogger(__name__)
 

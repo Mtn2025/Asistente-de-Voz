@@ -6,11 +6,11 @@ import logging
 from dataclasses import dataclass
 from typing import Optional, Any
 
-from app.domain.entities.call import Call, CallStatus
-from app.domain.value_objects.call_id import CallId
-from app.domain.value_objects.call_context import CallMetadata
-from app.domain.ports.call_repository_port import CallRepositoryPort
-from app.domain.ports.config_repository_port import ConfigRepositoryPort
+from app_nuevo.domain.entities.call import Call, CallStatus
+from app_nuevo.domain.value_objects.call_id import CallId
+from app_nuevo.domain.value_objects.call_context import CallMetadata
+from app_nuevo.domain.ports.call_repository_port import CallRepositoryPort
+from app_nuevo.domain.ports.config_repository_port import ConfigRepositoryPort
 
 logger = logging.getLogger(__name__)
 
