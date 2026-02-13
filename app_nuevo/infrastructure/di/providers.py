@@ -7,20 +7,19 @@ Isolates configuration logic from the Container.
 from typing import Any
 
 # Ports
-# Ports (Relative import from domain.ports)
-from ....domain.ports import (
+from app_nuevo.domain.ports import (
     LLMPort, STTPort, TTSPort, 
     CallRepositoryPort, ConfigRepositoryPort, TranscriptRepositoryPort, ExtractionPort
 )
 
-# Adapters (Relative imports from infrastructure.adapters)
-from ..adapters.llm.groq_llm_adapter import GroqLLMAdapter
-from ..adapters.stt.azure_stt_adapter import AzureSTTAdapter
-from ..adapters.tts.azure_tts_adapter import AzureTTSAdapter
-from ..adapters.persistence.postgres_config_repository import PostgresConfigRepository
-from ..adapters.persistence.sqlalchemy_call_repository import SQLAlchemyCallRepository
-from ..adapters.persistence.sqlalchemy_transcript_repository import SQLAlchemyTranscriptRepository
-from ..adapters.extraction.groq_extraction_adapter import GroqExtractionAdapter
+# Adapters
+from app_nuevo.infrastructure.adapters.llm.groq_llm_adapter import GroqLLMAdapter
+from app_nuevo.infrastructure.adapters.stt.azure_stt_adapter import AzureSTTAdapter
+from app_nuevo.infrastructure.adapters.tts.azure_tts_adapter import AzureTTSAdapter
+from app_nuevo.infrastructure.adapters.persistence.postgres_config_repository import PostgresConfigRepository
+from app_nuevo.infrastructure.adapters.persistence.sqlalchemy_call_repository import SQLAlchemyCallRepository
+from app_nuevo.infrastructure.adapters.persistence.sqlalchemy_transcript_repository import SQLAlchemyTranscriptRepository
+from app_nuevo.infrastructure.adapters.extraction.groq_extraction_adapter import GroqExtractionAdapter
 
 # DB
 from app_nuevo.infrastructure.database.session import AsyncSessionLocal

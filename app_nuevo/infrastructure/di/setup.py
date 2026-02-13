@@ -6,12 +6,12 @@ Configures dependencies and returns a ready-to-use Container.
 import logging
 from typing import Any
 
-from .registry import ComponentRegistry
-from .container import DIContainer
-from .providers import InfrastructureProviders, PersistenceProviders
+from app_nuevo.infrastructure.di.registry import ComponentRegistry
+from app_nuevo.infrastructure.di.container import DIContainer
+from app_nuevo.infrastructure.di.providers import InfrastructureProviders, PersistenceProviders
 
 # Ports
-from ....domain.ports import (
+from app_nuevo.domain.ports import (
     LLMPort,
     STTPort,
     TTSPort,
