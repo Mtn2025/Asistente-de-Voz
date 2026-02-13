@@ -112,7 +112,7 @@ async def test_call_telnyx(
             raise HTTPException(status_code=400, detail="Missing 'to' phone number")
 
         # Resolve Config via Repository (Clean Arch)
-        from app_nuevo.domain.ports.config_repository import ConfigRepositoryPort
+        from app_nuevo.domain.ports.config_repository_port import ConfigRepositoryPort
         config_repo = container.resolve(ConfigRepositoryPort)
         # Assuming agent_id 1 for test
         config = await config_repo.get_agent_config(1)

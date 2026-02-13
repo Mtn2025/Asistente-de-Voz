@@ -8,7 +8,7 @@ from typing import Any, Dict
 from fastapi import APIRouter, Depends, HTTPException, Request
 
 from app_nuevo.interfaces.http.dependencies import verify_api_key, get_container, DIContainer
-from app_nuevo.domain.ports.config_repository import ConfigRepositoryPort
+from app_nuevo.domain.ports.config_repository_port import ConfigRepositoryPort
 
 # Schemas
 from app_nuevo.interfaces.schemas.browser_schemas import BrowserConfigUpdate

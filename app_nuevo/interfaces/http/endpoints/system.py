@@ -20,7 +20,7 @@ async def health_check(
     status = {"status": "healthy", "database": "unknown"}
     
     try:
-        from app_nuevo.domain.ports.config_repository import ConfigRepositoryPort
+        from app_nuevo.domain.ports.config_repository_port import ConfigRepositoryPort
         repo = container.resolve(ConfigRepositoryPort)
         # Simple read to verify connection
         await repo.get_agent_config(1)

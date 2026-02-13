@@ -7,8 +7,8 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Request
 
 from app_nuevo.interfaces.http.dependencies import verify_api_key, get_container, DIContainer
-from app_nuevo.domain.ports.call_repository import CallRepositoryPort
-from app_nuevo.domain.ports.transcript_repository import TranscriptRepositoryPort
+from app_nuevo.domain.ports.call_repository_port import CallRepositoryPort
+from app_nuevo.domain.ports.transcript_repository_port import TranscriptRepositoryPort
 
 router = APIRouter(prefix="/history", tags=["History"])
 logger = logging.getLogger(__name__)
