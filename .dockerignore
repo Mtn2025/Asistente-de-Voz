@@ -1,0 +1,78 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation and reports
+*.md
+!README.md
+!DATABASE.md
+docs/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+env/
+venv/
+ENV/
+.venv/
+
+# Environment (will be injected)
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Testing
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Temporary
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Project management files
+RECYCLING_QUEUE.md
+LEGACY_MAP.md
+*_REPORT_*.md
+AUDIT_*.md
+CORRECTION_*.md
+MIGRATION_*.md
+IMPLEMENTATION_*.md
+ANALYSIS_*.md
+task.md
+implementation_plan.md
+walkthrough.md
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
