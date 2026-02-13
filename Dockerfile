@@ -11,6 +11,9 @@ WORKDIR /build
 # Install system dependencies for compilation
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
+    g++ \
+    libgomp1 \
+    libstdc++6 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create virtual environment
@@ -34,6 +37,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     libgomp1 \
+    libstdc++6 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy virtual environment from builder
