@@ -10,23 +10,9 @@ from fastapi import Depends, HTTPException, Security, status, Request
 from fastapi.security import APIKeyHeader
 
 from app_nuevo.infrastructure.di.container import DIContainer
-# Accessing the global container instance - in a real app this might be initialized in main
-# For now we will assume main.py will set this or we create a singleton accessor
-from app_nuevo.infrastructure.di.registry import registry
+# Import the properly configured container from infrastructure setup
+from app_nuevo.infrastructure.di.setup import get_container
 from app_nuevo.infrastructure.config.settings import settings
-
-logger = logging.getLogger(__name__)
-
-# Single instance of container (to be initialized by main app)
-_container: Optional[DIContainer] = None
-
-def get_container() -> DIContainer:
-    """Get the DI Container instance."""
-    global _container
-    if _container is None:
-        # Lazy initialization if not set (for tests/scripts)
-        _container = DIContainer(registry)
-    return _container
 
 # --- Authentication ---
 
