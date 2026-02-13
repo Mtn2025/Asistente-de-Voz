@@ -40,39 +40,38 @@ async def diagnostic_onnx(
     _ = Depends(verify_api_key)
 ):
     """
-    Run onnxruntime diagnostic script internally and return output.
-    This is a temporary endpoint for debugging.
+    Run onnxruntime diagnostic (Pure Python version).
+    Checks architecture and imports without blocking subprocesses.
     """
-    import subprocess
-    import os
+    import sys
+    import platform
+    import importlib.util
     
-    script_path = "/app/diagnose_onnx.sh"
+    info = {
+        "platform": sys.platform,
+        "machine": platform.machine(),
+        "processor": platform.processor(),
+        "python_version": sys.version,
+        "onnxruntime_installed": False,
+        "onnxruntime_version": None,
+        "import_error": None
+    }
     
-    if not os.path.exists(script_path):
-        return {"error": f"Script not found at {script_path}"}
+    # Check if package is installed
+    spec = importlib.util.find_spec("onnxruntime")
+    if spec:
+        info["onnxruntime_installed"] = True
+        try:
+            import onnxruntime
+            info["onnxruntime_version"] = onnxruntime.__version__
+            info["status"] = "SUCCESS"
+        except ImportError as e:
+            info["import_error"] = str(e)
+            info["status"] = "IMPORT_FAILED"
+        except Exception as e:
+            info["import_error"] = f"Unexpected error: {str(e)}"
+            info["status"] = "ERROR"
+    else:
+        info["status"] = "NOT_INSTALLED"
         
-    try:
-        # Ensure executable
-        subprocess.run(["chmod", "+x", script_path], check=False)
-        
-        # Run script
-        result = subprocess.run(
-            ["/bin/bash", script_path],
-            capture_output=True,
-            text=True,
-            timeout=30
-        )
-        
-        return {
-            "stdout": result.stdout,
-            "stderr": result.stderr,
-            "returncode": result.returncode,
-            "system_info": {
-                "platform": os.uname().sysname,
-                "machine": os.uname().machine,
-                "release": os.uname().release
-            }
-        }
-    except Exception as e:
-        logger.error(f"Diagnostic failed: {e}")
-        return {"error": str(e)}
+    return info
