@@ -20,11 +20,11 @@ async def health_check(
     status = {"status": "healthy", "database": "unknown"}
     
     try:
-        from app_nuevo.domain.ports.config_repository_port import ConfigRepositoryPort
-        repo = container.resolve(ConfigRepositoryPort)
-        # Simple read to verify connection - use correct interface method
-        config = await repo.get_config(profile="default")
-        status["database"] = "connected"
+        from app_nuevo.infrastructure.database.session import AsyncSessionLocal
+        # Test database connection with simple query
+        async with AsyncSessionLocal() as session:
+            await session.execute("SELECT 1")
+            status["database"] = "connected"
     except Exception as e:
         logger.error(f"Health DB error: {e}")
         status["database"] = "disconnected"
