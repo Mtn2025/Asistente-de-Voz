@@ -10,9 +10,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
+# Create virtual environment
+RUN python -m venv /opt/venv
+# Activate venv for installation
+ENV PATH="/opt/venv/bin:$PATH"
+
 # Copy and install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir --user -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Stage 2: Runtime
 FROM python:3.11-slim
@@ -24,14 +29,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy installed packages from builder
-COPY --from=builder /root/.local /root/.local
+# Copy virtual environment from builder
+COPY --from=builder /opt/venv /opt/venv
+
+# Add venv to PATH (this activates it for all future commands)
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy application code
 COPY . .
-
-# Add local bin to PATH
-ENV PATH=/root/.local/bin:$PATH
 
 # Create non-root user
 RUN useradd -m -u 1000 appuser && \
