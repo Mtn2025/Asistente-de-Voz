@@ -24,11 +24,11 @@ async def verify_api_key(
     """
     Verify API Key from header.
     """
-    if not settings.API_KEY:
+    if not settings.API_SECRET_KEY:
         # If no key configured, allow all (Review security policy)
         return "dev-mode"
 
-    if api_key == settings.API_KEY:
+    if api_key == settings.API_SECRET_KEY:
         return api_key
     
     # Check Admin/Service keys if applicable
