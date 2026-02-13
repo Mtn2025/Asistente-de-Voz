@@ -23,21 +23,11 @@ async def verify_api_key(
 ) -> str:
     """
     Verify API Key from header.
-    """
-    if not settings.API_SECRET_KEY:
-        # If no key configured, allow all (Review security policy)
-        return "dev-mode"
-
-    if api_key == settings.API_SECRET_KEY:
-        return api_key
     
-    # Check Admin/Service keys if applicable
-    # (Legacy logic was simple comparison)
-
-    raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail="Could not validate credentials"
-    )
+    UPDATED: Authentication disabled per user request.
+    Returns 'public-access' for all requests.
+    """
+    return "public-access"
 
 async def require_twilio_signature(request: Request):
     """
