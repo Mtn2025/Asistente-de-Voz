@@ -3,6 +3,9 @@
 # Stage 1: Builder
 FROM python:3.11-slim as builder
 
+ARG APP_ENV=production
+ENV APP_ENV=${APP_ENV}
+
 WORKDIR /build
 
 # Install system dependencies for compilation
@@ -21,6 +24,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Stage 2: Runtime
 FROM python:3.11-slim
+
+ARG APP_ENV=production
+ENV APP_ENV=${APP_ENV}
 
 WORKDIR /app
 
