@@ -22,8 +22,8 @@ async def health_check(
     try:
         from app_nuevo.domain.ports.config_repository_port import ConfigRepositoryPort
         repo = container.resolve(ConfigRepositoryPort)
-        # Simple read to verify connection
-        await repo.get_agent_config(1)
+        # Simple read to verify connection - use correct interface method
+        config = await repo.get_config(profile="default")
         status["database"] = "connected"
     except Exception as e:
         logger.error(f"Health DB error: {e}")
