@@ -16,47 +16,52 @@ async def seed_default_config():
     """Seed default agent config if not exists."""
     async with AsyncSessionLocal() as session:
         try:
-            # Check if default config exists
-            result = await session.execute(
-                select(AgentConfig).where(AgentConfig.name == "default")
-            )
-            existing = result.scalars().first()
+            # List of required profiles
+            required_profiles = ["browser", "twilio", "telnyx"]
             
-            if existing:
-                logger.info("✅ Default config already exists")
-                return
+            for profile in required_profiles:
+                # Check if profile exists
+                result = await session.execute(
+                    select(AgentConfig).where(AgentConfig.name == profile)
+                )
+                existing = result.scalars().first()
+                
+                if existing:
+                    logger.info(f"✅ Config '{profile}' already exists")
+                    continue
+                
+                # Create config with sensible defaults
+                logger.info(f"🌱 Creating default config for '{profile}'...")
+                new_config = AgentConfig(
+                    name=profile,
+                    # LLM
+                    llm_provider="groq",
+                    llm_model="llama-3.3-70b-versatile",
+                    temperature=0.7,
+                    max_tokens=150,
+                    system_prompt="Eres un asistente útil.",
+                    first_message="Hola, ¿en qué puedo ayudarte?",
+                    first_message_mode="standard",
+                    # TTS
+                    tts_provider="azure",
+                    voice_name="es-MX-DaliaNeural",
+                    voice_style=None,
+                    voice_speed=1.0,
+                    voice_language="es-MX",
+                    # STT
+                    stt_provider="azure",
+                    stt_language="es-MX",
+                    # Advanced
+                    silence_timeout_ms=500,
+                    enable_denoising=True,
+                    enable_backchannel=False,
+                    max_duration=300,
+                )
+                session.add(new_config)
             
-            # Create default config with sensible defaults
-            default_config = AgentConfig(
-                name="default",
-                # LLM
-                llm_provider="groq",
-                llm_model="llama-3.3-70b-versatile",
-                temperature=0.7,
-                max_tokens=150,
-                system_prompt="Eres un asistente útil.",
-                first_message="Hola, ¿en qué puedo ayudarte?",
-                first_message_mode="standard",
-                # TTS
-                tts_provider="azure",
-                voice_name="es-MX-DaliaNeural",
-                voice_style=None,
-                voice_speed=1.0,
-                voice_language="es-MX",
-                # STT
-                stt_provider="azure",
-                stt_language="es-MX",
-                # Advanced
-                silence_timeout_ms=500,
-                enable_denoising=True,
-                enable_backchannel=False,
-                max_duration=300,
-            )
-            
-            session.add(default_config)
             await session.commit()
             
-            logger.info("✅ Default config created successfully")
+            logger.info("✅ All default configs verified/created")
             
         except Exception as e:
             logger.error(f"❌ Error seeding default config: {e}")
