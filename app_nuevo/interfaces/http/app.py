@@ -109,4 +109,14 @@ def create_app() -> FastAPI:
     # Let's map WS to /ws for clarity
     app.include_router(ws_router.router, prefix="/ws") 
 
+    # Root Endpoint
+    @app.get("/")
+    async def root():
+        """Root endpoint to verify API is running."""
+        return {
+            "message": "Asistente de Voz API is running",
+            "docs": "/docs",
+            "version": "2.0.0"
+        }
+
     return app
