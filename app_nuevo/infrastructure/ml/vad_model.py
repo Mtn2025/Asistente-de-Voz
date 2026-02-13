@@ -2,13 +2,13 @@
 import logging
 import numpy as np
 
+logger = logging.getLogger(__name__)
+
 try:
     import onnxruntime
 except ImportError:
-    logging.error("onnxruntime not found. Please install it to use Silero VAD.")
+    logger.warning("⚠️ onnxruntime not available. VAD will be disabled. This is expected if running without ML dependencies.")
     onnxruntime = None
-
-logger = logging.getLogger(__name__)
 
 # Constants
 _MODEL_RESET_STATES_TIME = 5.0
