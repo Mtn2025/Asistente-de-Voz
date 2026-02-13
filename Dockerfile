@@ -33,6 +33,7 @@ WORKDIR /app
 # Install runtime dependencies only
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
+    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy virtual environment from builder
@@ -43,6 +44,12 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy application code
 COPY . .
+
+# Download Silero VAD model
+RUN mkdir -p models && \
+    curl -L https://github.com/snakers4/silero-vad/raw/master/files/silero_vad.onnx \
+    -o models/silero_vad.onnx && \
+    echo "Silero VAD model downloaded successfully"
 
 # Create non-root user
 RUN useradd -m -u 1000 appuser && \
