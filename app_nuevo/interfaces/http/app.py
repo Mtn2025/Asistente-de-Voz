@@ -11,6 +11,7 @@ from app_nuevo.infrastructure.config.settings import settings
 from app_nuevo.infrastructure.di.container import DIContainer
 from app_nuevo.infrastructure.di.registry import registry
 from app_nuevo.interfaces.http.dependencies import get_container
+from app_nuevo.domain.ports.config_repository_port import ConfigRepositoryPort
 
 # Routers
 from app_nuevo.interfaces.http.endpoints import calls, config, history, system
@@ -109,14 +110,94 @@ def create_app() -> FastAPI:
     # Let's map WS to /ws for clarity
     app.include_router(ws_router.router, prefix="/ws") 
 
-    # Root Endpoint
-    @app.get("/")
-    async def root():
-        """Root endpoint to verify API is running."""
-        return {
-            "message": "Asistente de Voz API is running",
-            "docs": "/docs",
-            "version": "2.0.0"
+    # --- Static & Templates ---
+    from fastapi.staticfiles import StaticFiles
+    from fastapi.templating import Jinja2Templates
+    from fastapi import Request
+    import json
+
+    # Mount Static
+    # Ensure directory exists, or this will raise error. We created it.
+    app.mount("/static", StaticFiles(directory="app_nuevo/interfaces/http/static"), name="static")
+
+    # Templates
+    templates = Jinja2Templates(directory="app_nuevo/interfaces/http/templates")
+
+    # --- Root Endpoint (Dashboard) ---
+    @app.get("/", include_in_schema=False)
+    async def root(request: Request):
+        """
+        Serve the Legacy Dashboard with injected configuration.
+        """
+        container = get_container()
+        repo = container.resolve(ConfigRepositoryPort)
+
+        # 1. Helper to fetch and map config
+        async def get_profile_data(profile: str, suffix: str = ""):
+            try:
+                conf = await repo.get_config(profile=profile)
+                # We need a mapper here similar to config.py but returning a simple dict
+                # For now, we assume reasonable compatibility or use simple dict dump
+                # The repo returns a Pydantic model usually, so model_dump is safe
+                if hasattr(conf, 'model_dump'):
+                    return conf.model_dump(), suffix
+                return conf.__dict__, suffix
+            except Exception as e:
+                logger.error(f"Failed to load {profile} config: {e}")
+                return {}, suffix
+
+        # 2. Fetch all profiles
+        browser_data, _ = await get_profile_data("browser")
+        twilio_data, _ = await get_profile_data("twilio")
+        telnyx_data, _ = await get_profile_data("telnyx")
+
+        # 3. Merge into legacy "flat" structure
+        # Legacy expects browser keys at root, and others with suffixes
+        merged_config = {**browser_data} # Browser is base
+
+        # Map Twilio keys with _phone suffix
+        for k, v in twilio_data.items():
+            merged_config[f"{k}_phone"] = v
+            # Manual mapping for legacy impedance mismatches if needed
+            if k == "llm_provider": merged_config["llm_provider_phone"] = v
+
+        # Map Telnyx keys with _telnyx suffix
+        for k, v in telnyx_data.items():
+            merged_config[f"{k}_telnyx"] = v
+            if k == "llm_provider": merged_config["llm_provider_telnyx"] = v
+
+        # 4. Fetch Catalogs (Stubs for now, to be filled by Adapters)
+        # In a real scenario, we'd resolve TTSAdapter/LLMAdapter here
+        voices_json = {
+            "azure": {
+                "es-MX": [
+                    {"id": "es-MX-DaliaNeural", "name": "Dalia (Femenino)", "gender": "female"},
+                    {"id": "es-MX-JorgeNeural", "name": "Jorge (Masculino)", "gender": "male"}
+                ],
+                "en-US": [
+                    {"id": "en-US-JennyNeural", "name": "Jenny (Female)", "gender": "female"}
+                ]
+            }
         }
+        styles_json = {} # Azure styles
+        models_json = {
+            "groq": [{"id": "llama-3.1-70b-versatile", "name": "Llama 3.1 70B"}],
+            "openai": [{"id": "gpt-4o", "name": "GPT-4o"}]
+        }
+        langs_json = {
+            "azure": [{"id": "es-MX", "name": "Español (México)"}, {"id": "en-US", "name": "Inglés (USA)"}]
+        }
+
+        return templates.TemplateResponse(
+            "dashboard.html",
+            {
+                "request": request,
+                "config_json": json.dumps(merged_config),
+                "voices_json": json.dumps(voices_json),
+                "styles_json": json.dumps(styles_json),
+                "models_json": json.dumps(models_json),
+                "langs_json": json.dumps(langs_json)
+            }
+        )
 
     return app

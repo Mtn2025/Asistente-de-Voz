@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: voice-assistant-app
     restart: unless-stopped
-    expose:
-      - "${PORT}"
+    ports:
+      - "${PORT}:${PORT}"
     environment:
       # Server
       - PORT=${PORT}
@@ -36,6 +36,7 @@ services:
       # Security
       - API_KEY=${API_KEY}
       - SECRET_KEY=${SECRET_KEY}
+      - ADMIN_API_KEY=${ADMIN_API_KEY}
 
     depends_on:
       db:
