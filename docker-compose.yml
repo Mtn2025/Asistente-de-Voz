@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: voice-assistant-app
     restart: unless-stopped
-    ports:
-      - "${PORT}:${PORT}"
+    expose:
+      - "${PORT}"
     environment:
       # Server
       - PORT=${PORT}
